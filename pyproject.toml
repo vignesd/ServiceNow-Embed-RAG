@@ -1,7 +1,7 @@
 [project]
 name = "ServiceNow-Embed-RAG"
 version = "0.1.0"
-description = "Add your description here"
+description = "A local, high-performance RAG-based ServiceNow ITSM assistant optimized for 16GB RAM machines using Ollama, ChromaDB, and LangChain."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
@@ -15,3 +15,4 @@ dependencies = [
     "pypdf>=6.21.1",
     "python-dotenv>=1.2.4",
 ]
+

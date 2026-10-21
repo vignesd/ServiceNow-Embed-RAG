@@ -8,19 +8,23 @@ A lightweight, local Retrieval-Augmented Generation (RAG) assistant designed for
 
 ```
 ServiceNow-Embed-RAG
-├── core
-│   ├── __init__.py
-│   ├── agent.py         # LCEL streaming agent using ChatOllama
-│   ├── embeddings.py    # Incremental vector store sync & file hashing
-│   ├── search.py        # Semantic similarity retrieval engine
-│   └── splitter.py      # Markdown, TXT, and PDF chunkers with metadata injection
-├── documents            # Local IT service request guides (Markdown/PDF/TXT)
-├── config.py            # Centralized project configuration (.env driven)
-├── logger.py            # Centralized logging with toggleable file/console output
-├── main.py              # CLI entrypoint and interactive loop
-├── pyproject.toml       # Project metadata & dependencies
-└── .env.example         # Environment variable template
-
+├──chat
+│   ├──__init__.py
+│   └──agent.py
+├──core
+│   ├──__init__.py
+│   ├──embedding.py
+│   ├──search.py
+│   └──splitter.py
+├──config.py
+├──logger.py
+├──main.py
+├──pyproject.toml
+├──README.md
+├──uv.lock
+├──.env.example
+├──.gitignore
+└──.python-version
 ```
 
 ### Core Components:
