@@ -75,5 +75,5 @@ def search_documents(
             "distance": float(distance)
         })
 
-    print("=" * 50)
+    # print("=" * 50)
     return formatted_results

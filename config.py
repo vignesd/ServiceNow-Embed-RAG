@@ -18,7 +18,7 @@ CHROMA_DIR = Path(os.getenv("CHROMA_DIR", "chroma_db"))
 COLLECTION_NAME = os.getenv("COLLECTION_NAME", "ai_knowledge")
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "embeddinggemma-2")
 
-LLM_MODEL = os.getenv("LLM_MODEL", "gemma4:e4b ")
+LLM_MODEL = os.getenv("LLM_MODEL", "gemma4:e4b")
 
 # --- Chunking Parameters ---
 try:
@@ -34,6 +34,20 @@ except ValueError:
     CHUNK_OVERLAP = 250
     logger.warning(
         "Invalid CHUNK_OVERLAP in environment variables. Falling back to default: 120")
+
+try:
+    EMBEDDING_BATCH_SIZE = int(os.getenv("EMBEDDING_BATCH_SIZE", 16))
+except ValueError:
+    EMBEDDING_BATCH_SIZE = 16
+    logger.warning(
+        "Invalid EMBEDDING_BATCH_SIZE in environment variables. Falling back to default: 16")
+
+try:
+    OLLAMA_BASE_URL = os.getenv("LLM_MODEL", "http://127.0.0.1:11434")
+except ValueError:
+    OLLAMA_BASE_URL = "http://127.0.0.1:11434"
+    logger.warning(
+        "Invalid OLLAMA_BASE_URL in environment variables. Falling back to default: http://127.0.0.1:11434")
 
 
 # --- Text Splitting / Parsing Configurations ---

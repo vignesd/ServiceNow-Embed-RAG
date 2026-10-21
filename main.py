@@ -1,14 +1,13 @@
-
 import uuid
 
-from core.embedding import (
-    build_vector_store,
+from core.vector_stores import (
     get_vector_store,
+    build_vector_store,
 )
-from core.splitter import chunk_documents
+from core.chunk_documents import chunk_documents
 from chat.agent import (
-    generate_rag_response_stream,
-    clear_conversation_history,
+    get_rag_response,
+    clear_conversation_history,  # Keep if your agent supports history tracking
 )
 from logger import setup_logging, get_logger
 
@@ -51,7 +50,8 @@ def main() -> None:
 
             # Optionally start a fresh conversation.
             if question.lower() == "new":
-                clear_conversation_history(session_id)
+                if "clear_conversation_history" in globals():
+                    clear_conversation_history(session_id)
                 session_id = str(uuid.uuid4())
                 logger.info("Started new conversation session: %s", session_id)
                 print("Started a new conversation.")
@@ -59,10 +59,11 @@ def main() -> None:
 
             print("\nAssistant: ", end="", flush=True)
 
-            for token in generate_rag_response_stream(
+            # Pass parameters depending on your core/agent.py signature
+            for token in get_rag_response(
                 vector_store=vector_store,
                 question=question,
-                session_id=session_id,
+                session_id=session_id,  # Uncomment if your agent uses session memory
             ):
                 print(token, end="", flush=True)
 
@@ -72,8 +73,9 @@ def main() -> None:
         print("\nConversation interrupted.")
 
     finally:
-        # Remove this session's in-memory history when exiting.
-        clear_conversation_history(session_id)
+        # Remove this session's in-memory history when exiting (if supported).
+        if "clear_conversation_history" in globals():
+            clear_conversation_history(session_id)
         logger.info("Conversation ended.")
 
 

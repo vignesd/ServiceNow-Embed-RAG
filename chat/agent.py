@@ -10,6 +10,7 @@ from langchain_core.messages import AIMessage, BaseMessage, HumanMessage
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_ollama import ChatOllama
+from langchain_openai import ChatOpenAI
 
 from core.search import search_documents
 from config import LLM_MODEL
@@ -23,7 +24,13 @@ logger = get_logger(__name__)
 
 HISTORY_MAX_MESSAGES = 10
 
-llm = ChatOllama(
+# llm = ChatOllama(
+#     model=LLM_MODEL,
+#     temperature=0.2,
+#     top_p=0.95,
+# )
+
+llm = ChatOpenAI(
     model=LLM_MODEL,
     temperature=0.2,
     top_p=0.95,
@@ -148,7 +155,7 @@ answer_chain = RAG_PROMPT | llm | StrOutputParser()
 # Streaming RAG response
 # ---------------------------------------------------------------------
 
-def generate_rag_response_stream(
+def get_rag_response(
     vector_store: Chroma,
     question: str,
     session_id: str,
@@ -276,6 +283,7 @@ def generate_rag_response_stream(
         complete_answer = "".join(answer_parts).strip()
         _save_turn(session_id, question, complete_answer)
 
+        print("\n")
         logger.info(
             "RAG response completed for session_id=%s",
             session_id,
