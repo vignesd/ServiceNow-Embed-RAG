@@ -24,17 +24,17 @@ logger = get_logger(__name__)
 
 HISTORY_MAX_MESSAGES = 10
 
-# llm = ChatOllama(
-#     model=LLM_MODEL,
-#     temperature=0.2,
-#     top_p=0.95,
-# )
-
-llm = ChatOpenAI(
+llm = ChatOllama(
     model=LLM_MODEL,
     temperature=0.2,
     top_p=0.95,
 )
+
+# llm = ChatOpenAI(
+#     model=LLM_MODEL,
+#     temperature=0.2,
+#     top_p=0.95,
+# )
 
 # ---------------------------------------------------------------------
 # In-memory, per-session conversation history
