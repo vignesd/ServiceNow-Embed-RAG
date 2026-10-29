@@ -13,9 +13,14 @@ ServiceNow-Embed-RAG
 │   └──agent.py
 ├──core
 │   ├──__init__.py
-│   ├──embedding.py
+│   ├──chunk_documents.py
+│   ├──embeddings.py
+│   ├──load_documents.py
 │   ├──search.py
-│   └──splitter.py
+│   └──vector_stores.py
+├──test_embedding
+│   ├──test_embedding.py
+│   └──test_ollama_embeddings.py
 ├──config.py
 ├──logger.py
 ├──main.py
