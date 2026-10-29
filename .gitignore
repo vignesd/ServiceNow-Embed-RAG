@@ -47,6 +47,8 @@ chroma/
 # Uncomment below if you don't want raw/local source documents tracked in Git
 documents/
 others/
+prompts/
+miscellaneous/
 
 # --- IDEs & Editors ---
 .vscode/

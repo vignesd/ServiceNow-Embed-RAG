@@ -1,5 +1,5 @@
 
-from core.rag_pipeline import initialize_rag_system
+from chat.rag_pipeline import initialize_rag_system
 
 from core.vector_stores import (
     get_vector_store,
@@ -23,6 +23,7 @@ def chain_rag() -> None:
         "Do you want to force a full re-index of all documents? (Y/N): "
     ).strip().lower()
     force_rebuild = rebuild_choice in {"y", "yes"}
+    logger.info(f"Force rebuild vector store - {force_rebuild}")
 
     logger.info("Loading and chunking documents...")
     chunks = chunk_documents()
