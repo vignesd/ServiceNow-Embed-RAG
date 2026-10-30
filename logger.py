@@ -6,9 +6,10 @@ import sys
 
 LOG_DIR = Path("logs")
 LOG_FILE = LOG_DIR / "app.log"
+log_level = os.environ.get("LOGLEVEL", "INFO").upper()
 
 
-def setup_logging(level: int = logging.INFO) -> None:
+def setup_logging(level: int | str = log_level) -> None:
     """
     Configure centralized logging with optional console and file outputs driven by .env.
     """

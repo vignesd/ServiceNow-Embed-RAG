@@ -93,9 +93,12 @@ def load_all_documents() -> list[Document]:
                 docs = load_pdf(file_path)
 
             raw_documents.extend(docs)
-            logger.info("Loaded raw file: %s (%d items/pages)",
-                        file_path.name, len(docs))
+            logger.debug("Loaded raw file: %s (%d items/pages)",
+                         file_path.name, len(docs))
+
         except Exception:
             logger.exception("Failed to load raw file %s", file_path)
+
+    logger.info(f"Total loaded documents: {len(raw_documents)}")
 
     return raw_documents

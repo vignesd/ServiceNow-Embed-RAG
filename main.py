@@ -70,8 +70,6 @@ def chain_rag() -> None:
             ):
                 print(token, end="", flush=True)
 
-            print()
-
     except KeyboardInterrupt:
         print("\nConversation interrupted.")
 
@@ -139,8 +137,9 @@ def graph_rag() -> None:
 
 
 if __name__ == "__main__":
-    type = int(input("Enter your option to run type (1 for chain,2 for graph)"))
-    if type == 1:
-        chain_rag()
-    else:
-        graph_rag()
+    chain_rag()
+    # type = int(input("Enter your option to run type (1 for chain,2 for graph)"))
+    # if type == 1:
+    #     chain_rag()
+    # else:
+    #     graph_rag()

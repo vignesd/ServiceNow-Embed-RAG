@@ -49,6 +49,21 @@ except ValueError:
     logger.warning(
         "Invalid OLLAMA_BASE_URL in environment variables. Falling back to default: http://127.0.0.1:11434")
 
+try:
+    HISTORY_MAX_MESSAGES = int(os.getenv("HISTORY_MAX_MESSAGES", 10))
+except ValueError:
+    HISTORY_MAX_MESSAGES = 10
+    logger.warning(
+        "Invalid HISTORY_MAX_MESSAGES in environment variables. Falling back to default: 10")
+
+
+try:
+    RETRIEVAL_K = int(os.getenv("RETRIEVAL_K", 5))
+except ValueError:
+    RETRIEVAL_K = 5
+    logger.warning(
+        "Invalid RETRIEVAL_K in environment variables. Falling back to default: 5")
+
 
 # --- Text Splitting / Parsing Configurations ---
 SEPARATORS = [
@@ -72,4 +87,6 @@ logger.info(f"Document Path - {DOCUMENT_DIR.resolve()}")
 logger.info(f"ChromaDB Path - {CHROMA_DIR.resolve()}")
 logger.info(f"Collection Name - {COLLECTION_NAME}")
 logger.info(f"Embedding Model - {EMBEDDING_MODEL}")
+logger.info(f"History Messages - {HISTORY_MAX_MESSAGES}")
+logger.info(f"Retrival K - {RETRIEVAL_K}")
 logger.info(f"Chunking Config - Size: {CHUNK_SIZE}, Overlap: {CHUNK_OVERLAP}")

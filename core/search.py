@@ -28,6 +28,9 @@ def _format_similarity_results(
         metadata = document.metadata or {}
 
         logger.info(
+            f"RAG_RESULT rank={rank} distance={distance:.4f} guide={metadata.get('guide_title', 'N/A')}")
+
+        logger.debug(
             "RAG_RESULT rank=%d distance=%.4f "
             "guide=%s guide_id=%s section=%s chunk=%s source=%s",
             rank,
@@ -177,7 +180,7 @@ def _expand_guide(
 
         initial_distance = distance_map.get(key)
 
-        logger.info(
+        logger.debug(
             "RAG_EXPANDED_RESULT rank=%d initial_distance=%s "
             "guide=%s guide_id=%s section=%s chunk=%s source=%s",
             rank,
@@ -291,7 +294,7 @@ def search_documents(
     """
     cleaned_question = question.strip()
 
-    logger.info(
+    logger.debug(
         "Executing similarity search: query=%r k=%d "
         "guide_id=%s expand_guide=%s",
         cleaned_question,
@@ -313,7 +316,7 @@ def search_documents(
         else None
     )
 
-    logger.info(
+    logger.debug(
         "Executing similarity search: query=%r k=%d "
         "guide_id=%s expand_guide=%s",
         cleaned_question,

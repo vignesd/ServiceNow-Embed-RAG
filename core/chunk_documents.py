@@ -107,14 +107,14 @@ def chunk_documents() -> list[Document]:
 
             chunks = [c for c in chunks if c.page_content.strip()]
             all_chunks.extend(chunks)
-            logger.info("Chunked %s: %d chunks", file_path.name, len(chunks))
+            logger.debug(f"Chunked {file_path.name}: {len(chunks)} chunks")
 
         except Exception:
-            logger.exception("Failed to chunk document %s", file_path)
+            logger.exception(f"Failed to chunk document {file_path}")
 
     if not all_chunks:
         raise ValueError(
             "No usable text chunks were extracted from documents.")
 
-    logger.info("Total generated chunks: %d", len(all_chunks))
+    logger.info(f"Total generated chunks: {len(all_chunks)}")
     return all_chunks
