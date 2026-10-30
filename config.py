@@ -43,7 +43,7 @@ except ValueError:
         "Invalid EMBEDDING_BATCH_SIZE in environment variables. Falling back to default: 16")
 
 try:
-    OLLAMA_BASE_URL = os.getenv("LLM_MODEL", "http://127.0.0.1:11434")
+    OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
 except ValueError:
     OLLAMA_BASE_URL = "http://127.0.0.1:11434"
     logger.warning(

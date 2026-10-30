@@ -121,13 +121,6 @@ def _save_turn(
         _conversation_store[session_id] = history[-HISTORY_MAX_MESSAGES:]
 
 
-retrieval_query_chain = RETRIEVAL_QUERY_PROMPT | llm | StrOutputParser()
-
-# Retrieval mode controls evidence coverage. Response detail controls only
-# presentation. A concise procedural answer still receives the complete guide.
-
-answer_chain = RAG_PROMPT | llm | StrOutputParser()
-
 # ---------------------------------------------------------------------
 # Streaming RAG response
 # ---------------------------------------------------------------------
@@ -137,6 +130,7 @@ def get_rag_response(
     vector_store: Chroma,
     question: str,
     session_id: str,
+    model_name: str,
 ) -> Iterator[str]:
     """
     Retrieve ServiceNow guide chunks and stream a response using Ollama.
@@ -162,9 +156,22 @@ def get_rag_response(
 
     # 1. Rewrite follow-up questions for better retrieval.
     retrieval_query = question
+    if model_name.__contains__("gpt"):
+        llm = ChatOpenAI(
+            model=model_name,
+            temperature=0.2,
+            top_p=0.95,
+        )
+    else:
+        llm = ChatOllama(
+            model=model_name,
+            temperature=0.2,
+            top_p=0.95,
+        )
 
     if history:
         try:
+            retrieval_query_chain = RETRIEVAL_QUERY_PROMPT | llm | StrOutputParser()
             rewritten_query = retrieval_query_chain.invoke(
                 {
                     "history": history,
@@ -291,6 +298,7 @@ def get_rag_response(
     answer_parts: list[str] = []
 
     try:
+        answer_chain = RAG_PROMPT | llm | StrOutputParser()
         stream = answer_chain.stream(
             {
                 "context": formatted_context,
