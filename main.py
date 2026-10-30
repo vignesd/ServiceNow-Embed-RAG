@@ -1,7 +1,7 @@
 
-from chat.rag_pipeline import initialize_rag_system
 
 from config import LLM_MODEL
+from chat.rag_pipeline import initialize_rag_system
 
 from core.vector_stores import (
     get_vector_store,

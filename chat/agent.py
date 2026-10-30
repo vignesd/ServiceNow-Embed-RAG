@@ -30,6 +30,9 @@ from logger import get_logger
 
 logger = get_logger(__name__)
 
+_conversation_store: dict[str, list[BaseMessage]] = {}
+_history_lock = Lock()
+
 
 def _normalize_query(query: str) -> str:
     """Normalize a query for deterministic phrase matching."""
@@ -68,26 +71,6 @@ def classify_response_detail(question: str) -> ResponseDetail:
     return ResponseDetail.CONCISE
 
 
-llm = ChatOllama(
-    model=LLM_MODEL,
-    temperature=0.2,
-    top_p=0.95,
-)
-
-# llm = ChatOpenAI(
-#     model=LLM_MODEL,
-#     temperature=0.2,
-#     top_p=0.95,
-# )
-
-# ---------------------------------------------------------------------
-# In-memory, per-session conversation history
-# ---------------------------------------------------------------------
-
-_conversation_store: dict[str, list[BaseMessage]] = {}
-_history_lock = Lock()
-
-
 def get_conversation_history(session_id: str) -> list[BaseMessage]:
     """Return a copy of the stored history for one chat session."""
     with _history_lock:
@@ -121,11 +104,6 @@ def _save_turn(
         _conversation_store[session_id] = history[-HISTORY_MAX_MESSAGES:]
 
 
-# ---------------------------------------------------------------------
-# Streaming RAG response
-# ---------------------------------------------------------------------
-
-
 def get_rag_response(
     vector_store: Chroma,
     question: str,
@@ -151,10 +129,8 @@ def get_rag_response(
         session_id,
     )
 
-    # Snapshot history so this request uses a consistent conversation state.
     history = get_conversation_history(session_id)
 
-    # 1. Rewrite follow-up questions for better retrieval.
     retrieval_query = question
     if model_name.__contains__("gpt"):
         llm = ChatOpenAI(
@@ -195,7 +171,6 @@ def get_rag_response(
             )
             retrieval_query = question
 
-    # 2. Classify retrieval coverage and answer presentation independently.
     retrieval_mode = classify_retrieval_mode(retrieval_query)
     response_detail = classify_response_detail(question)
     expand_guide = retrieval_mode == RetrievalMode.PROCEDURAL
@@ -211,7 +186,6 @@ def get_rag_response(
         retrieval_query,
     )
 
-    # 3. Retrieve relevant guide chunks from ChromaDB.
     try:
         search_results = search_documents(
             vector_store=vector_store,
@@ -242,7 +216,6 @@ def get_rag_response(
         yield answer
         return
 
-    # 4. Format retrieved chunks into the RAG context.
     context_blocks: list[str] = []
 
     for result in search_results:
@@ -294,7 +267,6 @@ def get_rag_response(
         len(formatted_context),
     )
 
-    # 5. Stream the answer with recent conversation history.
     answer_parts: list[str] = []
 
     try:
